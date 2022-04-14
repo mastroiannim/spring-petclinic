@@ -9,3 +9,4 @@ target/*
 .sts4-cache/
 _site/
 build
+bin
