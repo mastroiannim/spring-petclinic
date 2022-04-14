@@ -1,6 +1,6 @@
 tasks:
-- init: ./mvnw package -DskipTests
-  command: java -jar target/*.jar
+- init: ./gradlew build -x test --info
+  command: java -jar build/libs/*.jar
 
 # exposed ports
 ports:
