@@ -4,54 +4,44 @@
 
 plugins {
     id 'java'
-    id 'maven-publish'
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 repositories {
-    mavenLocal()
-    maven {
-        url = uri('https://repo.spring.io/snapshot')
-    }
+    jcenter()
+    mavenCentral()
+} 
 
-    maven {
-        url = uri('https://repo.spring.io/milestone')
-    }
-
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
-}
+ext.webjarsFontawesomeVersion = "4.7.0"
+ext.webjarsBootstrapVersion = "5.1.3"
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.1.6.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-cache:2.1.6.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.6.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.1.6.RELEASE'
-    implementation 'javax.cache:cache-api:1.1.1'
-    implementation 'org.ehcache:ehcache:3.6.3'
-    implementation 'org.webjars:webjars-locator-core:0.35'
-    implementation 'org.webjars:jquery:2.2.4'
-    implementation 'org.webjars:jquery-ui:1.11.4'
-    implementation 'org.webjars:bootstrap:3.3.6'
-    implementation 'org.springframework.boot:spring-boot-devtools:2.1.6.RELEASE'
-    runtimeOnly 'org.hsqldb:hsqldb:2.4.1'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.16'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
+  implementation 'org.springframework.boot:spring-boot-starter-cache'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  //implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
+  
+  implementation 'javax.cache:cache-api'
+
+  runtimeOnly 'org.hsqldb:hsqldb'  
+  runtimeOnly 'org.webjars:webjars-locator-core'
+  runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}"
+  runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}"
+  runtimeOnly 'org.ehcache:ehcache'
+  runtimeOnly 'com.h2database:h2'
+  runtimeOnly 'mysql:mysql-connector-java'
+  runtimeOnly 'org.postgresql:postgresql'
 }
 
 group = 'org.springframework.samples'
 version = '2.1.0.BUILD-SNAPSHOT'
 description = 'petclinic'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
