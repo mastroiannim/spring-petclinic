@@ -8,10 +8,9 @@ target/*
 /target
 .sts4-cache/
 _site/
-build
+build/*
 bin
 .gradle/*
 .idea/*
-.mvn/*
 .vscode/*
 
