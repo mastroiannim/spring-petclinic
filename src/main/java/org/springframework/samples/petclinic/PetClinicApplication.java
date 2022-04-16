@@ -80,8 +80,8 @@ public class PetClinicApplication {
         filter.setProperties(wroProperties());
         registration.setFilter(filter);
         registration.setEnabled(true);
-        //registration.addUrlPatterns("/webjars/*", "/resources/*");
-        registration.addUrlPatterns("/wro/*");
+        registration.addUrlPatterns("/webjars/*", "/resources/*");
+        //registration.addUrlPatterns("/wro/*");
         registration.setOrder(1);
         if(wroProperties() != null)
             LOGGER.warn(wroProperties().getProperty("managerFactoryClassName"));
