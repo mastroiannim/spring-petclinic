@@ -16,8 +16,13 @@
 
 package org.springframework.samples.petclinic;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 
 /**
  * PetClinic Spring Boot Application.
@@ -32,4 +37,32 @@ public class PetClinicApplication {
         SpringApplication.run(PetClinicApplication.class, args);
     }
 
+    @Bean
+    ServletRegistrationBean<MyServlet> myServletRegistration () {
+        ServletRegistrationBean<MyServlet> srb = new ServletRegistrationBean<MyServlet>();
+        srb.setServlet(new MyServlet());
+        srb.setUrlMappings(Arrays.asList("/path2/*"));
+        return srb;
+    }
+
+    @Bean
+    SpringWroFilter getWroFilter(){
+        return new SpringWroFilter();
+    }
+
+    /*
+    @Bean
+    MyWroManagerFactory getWroManagerFactory(){
+        return new MyWroManagerFactory();
+    }
+    */
+    /*@Bean
+    FilterRegistrationBean<SpringWroFilter> webResourceOptimizer() {
+        FilterRegistrationBean<SpringWroFilter> registration = new FilterRegistrationBean<SpringWroFilter>();
+        registration.setFilter(new SpringWroFilter());
+        registration.setEnabled(true);
+        registration.addUrlPatterns("/webjars/*", "/resources/*");
+        registration.setOrder(1);
+        return registration;
+    }*/
 }
