@@ -1,8 +1,10 @@
 package org.springframework.samples.petclinic;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import ro.isdc.wro.manager.factory.ConfigurableWroManagerFactory;
 import ro.isdc.wro.model.factory.WroModelFactory;
@@ -15,9 +17,8 @@ public class MyWroManagerFactory extends ConfigurableWroManagerFactory {
         return new XmlModelFactory() {
             @Override
             protected InputStream getModelResourceAsStream() throws IOException {
-
-                final String resourceLocation = "src/main/wro/" + getDefaultModelFilename();
-                final InputStream stream = new FileInputStream(resourceLocation);
+                final Resource resource = new ClassPathResource("classpath:/wro/wro.xml");
+                final InputStream stream = resource.getInputStream();
                 return stream;
             }
         };

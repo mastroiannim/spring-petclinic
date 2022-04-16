@@ -16,13 +16,23 @@
 
 package org.springframework.samples.petclinic;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+import ro.isdc.wro.http.ConfigurableWroFilter;
 
 /**
  * PetClinic Spring Boot Application.
@@ -32,6 +42,8 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 public class PetClinicApplication {
+
+    final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     public static void main(String[] args) {
         SpringApplication.run(PetClinicApplication.class, args);
@@ -45,24 +57,36 @@ public class PetClinicApplication {
         return srb;
     }
 
-    @Bean
-    SpringWroFilter getWroFilter(){
-        return new SpringWroFilter();
-    }
+    @Autowired
+    ResourceLoader resourceLoader;
 
-    /*
     @Bean
-    MyWroManagerFactory getWroManagerFactory(){
-        return new MyWroManagerFactory();
+    public Properties wroProperties() {
+        //LOGGER.warn(System.getProperty("java.class.path"));
+        Resource resource = resourceLoader.getResource("classpath:/wro/wro.properties");
+        try (InputStream input = resource.getInputStream()){
+            Properties prop = new Properties();
+            prop.load(input);
+            return prop;
+        }catch (IOException ex) {
+            return null;
+        }
     }
-    */
-    /*@Bean
-    FilterRegistrationBean<SpringWroFilter> webResourceOptimizer() {
-        FilterRegistrationBean<SpringWroFilter> registration = new FilterRegistrationBean<SpringWroFilter>();
-        registration.setFilter(new SpringWroFilter());
+    
+    @Bean
+    FilterRegistrationBean<ConfigurableWroFilter> webResourceOptimizer() {
+        FilterRegistrationBean<ConfigurableWroFilter> registration = new FilterRegistrationBean<ConfigurableWroFilter>();
+        ConfigurableWroFilter filter = new ConfigurableWroFilter();
+        filter.setProperties(wroProperties());
+        registration.setFilter(filter);
         registration.setEnabled(true);
-        registration.addUrlPatterns("/webjars/*", "/resources/*");
+        //registration.addUrlPatterns("/webjars/*", "/resources/*");
+        registration.addUrlPatterns("/wro/*");
         registration.setOrder(1);
+        if(wroProperties() != null)
+            LOGGER.warn(wroProperties().getProperty("managerFactoryClassName"));
+        else
+            LOGGER.warn("is null :(");
         return registration;
-    }*/
+    }
 }
