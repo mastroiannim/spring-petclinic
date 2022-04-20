@@ -29,10 +29,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import ro.isdc.wro.http.ConfigurableWroFilter;
+import ro.isdc.wro.manager.factory.ConfigurableWroManagerFactory;
+import ro.isdc.wro.manager.factory.WroManagerFactory;
+import ro.isdc.wro.model.factory.WroModelFactory;
+import ro.isdc.wro.model.factory.XmlModelFactory;
 
 /**
  * PetClinic Spring Boot Application.
@@ -76,7 +81,28 @@ public class PetClinicApplication {
     @Bean
     FilterRegistrationBean<ConfigurableWroFilter> webResourceOptimizer() {
         FilterRegistrationBean<ConfigurableWroFilter> registration = new FilterRegistrationBean<ConfigurableWroFilter>();
-        ConfigurableWroFilter filter = new ConfigurableWroFilter();
+        ConfigurableWroFilter filter = new ConfigurableWroFilter(){
+            @Override
+            protected WroManagerFactory newWroManagerFactory() {
+                LOGGER.warn("..newWroManagerFactory done!");
+                //return new MyWroManagerFactory();
+                return new ConfigurableWroManagerFactory(){
+                    @Override
+                    protected WroModelFactory newModelFactory() {
+                        return new XmlModelFactory() {
+                            @Override
+                            protected InputStream getModelResourceAsStream() throws IOException {
+                                final String resName = "wro/wro.xml";
+                                final Resource resource = new ClassPathResource(resName);
+                                LOGGER.warn("Resource_resource_[" + resource + "]");
+                                final InputStream stream = resource.getInputStream();
+                                return stream;
+                            }
+                        };
+                    }
+                };
+            }
+        };
         filter.setProperties(wroProperties());
         registration.setFilter(filter);
         registration.setEnabled(true);
