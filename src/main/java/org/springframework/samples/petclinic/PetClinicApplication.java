@@ -51,12 +51,10 @@ public class PetClinicApplication {
         return srb;
     }
 
-    
     @Bean
     FilterRegistrationBean<ConfigurableWroFilter> webResourceOptimizer() {
         FilterRegistrationBean<ConfigurableWroFilter> registration = new FilterRegistrationBean<ConfigurableWroFilter>();
         ConfigurableWroFilter filter = new SpringWroFilter();
-        
         registration.setFilter(filter);
         registration.setEnabled(true);
         //registration.addUrlPatterns("/webjars/*", "/resources/*");
