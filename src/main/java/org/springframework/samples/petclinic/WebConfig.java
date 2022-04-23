@@ -15,8 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         //  .addResourceHandler("/webjars/**")
         //  .addResourceLocations("/webjars/");
-        .addResourceHandler("/resources/**")
-        .addResourceLocations("/resources/", "classpath:/static/resources/");
-
+            .addResourceHandler("/resources/**")
+            .addResourceLocations("/resources/", "classpath:/static/resources/");
     }
 }
